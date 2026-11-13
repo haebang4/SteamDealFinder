@@ -1,5 +1,12 @@
 name: Daily Steam KR scan
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'config.yaml'
+      - '.github/workflows/**'
   schedule:
     - cron: '0 0 * * *' # 09:00 KST; GitHub may delay scheduled runs
   workflow_dispatch:
@@ -34,7 +41,7 @@ jobs:
       - name: Collect and generate report
         shell: bash
         env:
-          MAX_GAMES: ${{ inputs.max_games }}
+          MAX_GAMES: ${{ github.event_name == 'push' && '20' || inputs.max_games }}
         run: |
           set -o pipefail
           args=()
