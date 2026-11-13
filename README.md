@@ -2,12 +2,15 @@
 
 대한민국 Steam 스토어의 초특가와 **일반판보다 저렴한 상위 상품**을 찾는 Python 3.11+ 프로그램입니다. GitHub Actions가 수집하고 GitHub Pages가 결과를 보여주므로, 사용자는 Python이나 IDE를 설치하지 않아도 됩니다.
 
+**[결과 페이지 열기](https://haebang4.github.io/SteamDealFinder/)** · [GitHub Actions](https://github.com/haebang4/SteamDealFinder/actions/workflows/daily_scan.yml) · [배포 검증 실행](https://github.com/haebang4/SteamDealFinder/actions/runs/43481751611)
+
 ## 구현 및 검증 상태
 
 - KRW 할인 수집, 조건 필터, 패키지·번들 구성 기반 비교, 확인 필요 목록, CSV/JSON/정적 HTML 생성 구현.
 - 이름 유사성으로 게임을 연결하지 않습니다. 동일한 본편 App ID와 추가 App ID가 포함되어야 확정합니다.
 - 오프라인 pytest와 실제 Steam 소량 수집을 수행했습니다. 자세한 수치는 `data/validation.md`를 참조하세요.
-- GitHub Actions/Pages 워크플로는 작성했지만, 이 작업 폴더에 연결된 원격 저장소가 없어 **원격 실행 및 배포는 미검증**입니다.
+- GitHub Actions의 Linux·Python 3.11 환경에서 테스트 49개, 실제 Steam 수집, Pages 배포를 검증했습니다. 2026-11-14 첫 성공 실행은 게임 20개·상품 76개를 조사했고 초특가 0건·확정 역전 0건·확인 필요 55건입니다.
+- 매일 09:00 KST 예약과 수동 실행을 설정했습니다. 첫 예약 이벤트 자체의 실행 여부는 해당 시각 이후 Actions 로그에서 확인해야 합니다.
 - 전체 카탈로그 수집기나 가격 보장 서비스가 아닙니다. 결과가 0건이어도 해당 특가가 Steam 전체에 없다는 뜻은 아닙니다.
 
 ## GitHub에서만 사용하기
@@ -15,7 +18,7 @@
 1. 자신의 GitHub 계정에 저장소를 만들고 이 프로젝트 파일을 업로드합니다. 기본 브랜치는 `main`을 사용합니다. `.github/workflows/daily_scan.yml`, `src`, `tests`, `config.yaml`, `requirements.txt`, `pyproject.toml`을 포함합니다. `.venv`는 업로드하지 않습니다.
 2. 저장소 **Settings → Pages → Build and deployment → Source → GitHub Actions**를 선택합니다.
 3. **Actions → Daily Steam KR scan → Run workflow**를 실행합니다. 워크플로 실행을 비활성화한 저장소에서는 먼저 허용합니다.
-4. `scan`과 `deploy`가 모두 성공하면 **Settings → Pages** 또는 Actions 배포 환경의 URL을 엽니다. 일반적인 주소는 `https://<사용자명>.github.io/<저장소명>/`입니다. 아직 실제 배포 주소가 생성된 상태는 아닙니다.
+4. `scan`과 `deploy`가 모두 성공하면 **Settings → Pages** 또는 Actions 배포 환경의 URL을 엽니다. 이 저장소는 `https://haebang4.github.io/SteamDealFinder/`에 배포되어 있습니다. 다른 저장소에서는 `https://<사용자명>.github.io/<저장소명>/` 형식의 주소를 사용합니다.
 5. 매일 오전 9시(KST, cron `0 0 * * *` UTC) 자동 실행합니다. GitHub 예약 실행은 지연되거나 누락될 수 있으며, 비활성 공개 저장소에서는 스케줄이 비활성화될 수 있습니다.
 
 처음에는 공개 저장소를 권장합니다. 비공개 저장소의 Pages 제공 여부는 GitHub 요금제에 따라 다릅니다. 현재 수집은 API 키나 Secrets가 필요하지 않습니다. 비밀번호·개인 토큰을 코드나 이슈에 입력하지 마세요.
@@ -124,4 +127,4 @@ python -m pytest -q
 - 추가 콘텐츠가 실제 DLC인지, 별도 게임인지의 상세 분류. 포함 App ID와 알려진 상품명을 표시하며, 번들에선 이름 대신 App ID만 표시될 수 있습니다.
 - 공개 구매 양식에서 드러나지 않는 계정·지역·소유권 조건. 최종 구매 가능 여부를 보장하지 않습니다.
 - 정밀 할인 종료일, 장기 가격 이력, 알림, 데이터베이스, 실제 특가 역전의 실시간 검증.
-- 원격 GitHub Actions 실행·GitHub Pages 배포. 저장소 연결 후 반드시 실제 실행으로 확인해야 합니다.
+- 매일 예약 실행의 장기 안정성과 Steam 응답 변경에 대한 지속 점검. 수동 실행·첫 배포는 검증했으며 향후 예약 실행은 Actions에서 확인해야 합니다.
