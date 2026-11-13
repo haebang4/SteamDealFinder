@@ -3,3 +3,8 @@ __pycache__/
 .pytest_cache/
 *.log
 steam_*_probe.*
+docs/
+data/demo/
+data/qa/
+data/*.zip
+data/pytest-*/
