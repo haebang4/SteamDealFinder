@@ -2,14 +2,14 @@
 
 대한민국 Steam 스토어의 초특가와 **일반판보다 저렴한 상위 상품**을 찾는 Python 3.11+ 프로그램입니다. GitHub Actions가 수집하고 GitHub Pages가 결과를 보여주므로, 사용자는 Python이나 IDE를 설치하지 않아도 됩니다.
 
-**[결과 페이지 열기](https://haebang4.github.io/SteamDealFinder/)** · [GitHub Actions](https://github.com/haebang4/SteamDealFinder/actions/workflows/daily_scan.yml) · [배포 검증 실행](https://github.com/haebang4/SteamDealFinder/actions/runs/43481751611)
+**[결과 페이지 열기](https://haebang4.github.io/SteamDealFinder/)** · [GitHub Actions](https://github.com/haebang4/SteamDealFinder/actions/workflows/daily_scan.yml) · [배포 검증 실행](https://github.com/haebang4/SteamDealFinder/actions/runs/43484814915)
 
 ## 구현 및 검증 상태
 
 - KRW 할인 수집, 조건 필터, 패키지·번들 구성 기반 비교, 확인 필요 목록, CSV/JSON/정적 HTML 생성 구현.
 - 이름 유사성으로 게임을 연결하지 않습니다. 동일한 본편 App ID와 추가 App ID가 포함되어야 확정합니다.
 - 오프라인 pytest와 실제 Steam 소량 수집을 수행했습니다. 자세한 수치는 `data/validation.md`를 참조하세요.
-- GitHub Actions의 Linux·Python 3.11 환경에서 테스트 49개, 실제 Steam 수집, Pages 배포를 검증했습니다. 2026-11-14 첫 성공 실행은 게임 20개·상품 76개를 조사했고 초특가 0건·확정 역전 0건·확인 필요 55건입니다.
+- GitHub Actions의 Linux·Python 3.11 환경에서 테스트 51개, 실제 Steam 수집, Pages 배포를 검증했습니다. 2026-11-14 03:42 KST 실행은 게임 20개·관련 상품 76개를 조사했고, 전체 상품 CSV 96건과 확인 필요 가격 비교 54건을 생성했습니다. 초특가와 확정 역전은 0건입니다.
 - 매일 09:00 KST 예약과 수동 실행을 설정했습니다. 첫 예약 이벤트 자체의 실행 여부는 해당 시각 이후 Actions 로그에서 확인해야 합니다.
 - 전체 카탈로그 수집기나 가격 보장 서비스가 아닙니다. 결과가 0건이어도 해당 특가가 Steam 전체에 없다는 뜻은 아닙니다.
 
