@@ -85,10 +85,15 @@ CLI의 `--min-discount`, `--max-price`, `--max-pages`, `--max-games`, `--watch-a
 | 파일 | 내용 |
 | --- | --- |
 | `deals.csv` | 필터 조건을 만족하는 본편 할인 목록 |
+| `all_products.csv` | 조건 충족 여부와 무관한 전체 수집 상품(본편·패키지·번들)의 현재가·정가·할인율 |
 | `edition_inversions.csv` | 검증된 역전, 가격 차이·비율·구성·증거·각 URL·가격 수집 시각 |
 | `unverified.csv` | 본편 미포함, 개인화, 구성·가격 미확인 등의 사유 |
 | `results.json` | 실행 상태, 검색 범위, 오류, 수집한 App, 조사한 모든 offer, 확정/미확인 결과 |
 | `index.html` | 검색·필터·정렬·다운로드를 갖춘 정적 대시보드 |
+
+`price`는 현재 판매가(원), `original_price`는 정가(원), `discount`는 할인율(%)입니다. 비교 CSV는 일반판에 `standard_`, 상위 상품에 `edition_` 접두사를 사용합니다. 확인 필요 CSV도 양쪽 가격을 포함하며, 일반판 패키지를 확인하지 못한 경우 참고용 본편 App 가격을 `base_app_price`, `base_app_original_price`, `base_app_discount`로 별도 표시합니다. 가격이 확인되지 않으면 0원으로 채우지 않고 빈칸으로 남깁니다. 번들 정가도 Steam이 표시한 값을 확인할 수 있을 때만 저장합니다.
+
+초특가나 가격 역전이 0건이어도 `all_products.csv`에는 수집한 상품 가격이 저장됩니다. 웹페이지의 **수집한 전체 본편** 표에서도 본편의 정가·현재 가격·할인율을 확인할 수 있습니다.
 
 CSV는 UTF-8 BOM이며 Excel 수식 실행 방지를 위해 수식 문자로 시작하는 문자열에 작은따옴표를 붙입니다. HTML은 게임명을 HTML로 실행하지 않도록 이스케이프하고 `textContent`로 표시합니다.
 

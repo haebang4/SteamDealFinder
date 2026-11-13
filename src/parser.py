@@ -68,10 +68,13 @@ def purchase_candidates(html, scan_id):
             ids = sorted({int(a) for item in items for a in item["m_rgIncludedAppIDs"]})
             formatted = block.select_one(".discount_final_price")
             krw = formatted is not None and "₩" in formatted.get_text()
+            original = block.select_one(".discount_original_price")
+            original_match = re.fullmatch(r"\s*₩\s*([\d,]+)\s*", original.get_text()) if original else None
             bundles.append(Product(
                 "bundle", int(block["data-ds-bundleid"]),
                 title.get_text(" ", strip=True) if title else "Bundle",
                 won(int(price["data-price-final"])) if price and krw else None,
+                original_price=int(original_match[1].replace(",", "")) if original_match and krw else None,
                 discount=int(price.get("data-discount", 0)) if price else 0,
                 currency="KRW" if krw else "UNKNOWN", scan_id=scan_id,
                 app_ids=ids, contents=[{"id": i, "name": f"App {i}"} for i in ids],

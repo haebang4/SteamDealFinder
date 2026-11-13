@@ -34,3 +34,39 @@ def test_empty_exports(tmp_path):
     export_results(result, tmp_path)
     with (tmp_path / "deals.csv").open(encoding="utf-8-sig") as f:
         assert list(csv.DictReader(f)) == []
+
+
+def test_prices_in_all_and_comparison_csvs(tmp_path):
+    result = analyze(demo(), DEFAULTS)
+    inversion = result["edition_inversions"][0]
+    inversion["standard"].update(original_price=60000, discount=12)
+    inversion["edition"].update(original_price=53000, discount=94)
+    result["unverified"] = [{**inversion, "reason": "구성 미확인"}]
+    # No deals still leaves an unfiltered list of all observed products.
+    result["deals"] = []
+    result["inspected_offers"].append(result["inspected_offers"][0])
+    export_results(result, tmp_path)
+    def read(name):
+        with (tmp_path / name).open(encoding="utf-8-sig", newline="") as f:
+            return list(csv.DictReader(f))
+    all_products = read("all_products.csv")
+    assert len(all_products) == 4  # two apps and two packages; duplicate group removed
+    game = next(p for p in all_products if p["id"] == "5")
+    assert (game["price"], game["original_price"], game["discount"]) == ("3000", "30000", "90")
+    for filename in ("edition_inversions.csv", "unverified.csv"):
+        row = read(filename)[0]
+        assert (row["standard_price"], row["standard_original_price"], row["standard_discount"]) == ("53000", "60000", "12")
+        assert (row["edition_price"], row["edition_original_price"], row["edition_discount"]) == ("3150", "53000", "94")
+
+
+def test_unknown_prices_remain_blank(tmp_path):
+    result = analyze(demo(), DEFAULTS)
+    item = result["edition_inversions"][0]
+    item["edition"].update(price=None, original_price=None)
+    result["unverified"] = [{**item, "standard": None, "reason": "가격 미확인"}]
+    export_results(result, tmp_path)
+    with (tmp_path / "unverified.csv").open(encoding="utf-8-sig", newline="") as f:
+        row = next(csv.DictReader(f))
+    assert row["edition_price"] == row["edition_original_price"] == row["standard_price"] == ""
+    assert row["edition_discount"] == ""
+    assert row["base_app_price"] == "53000"

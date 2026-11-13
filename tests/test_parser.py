@@ -41,9 +41,10 @@ def test_purchase_verification():
 
 
 def test_personalized_bundle():
-    html = '''<div data-ds-bundleid="5" data-ds-bundle-data='{"m_bMustPurchaseAsSet":0,"m_rgItems":[{"m_rgIncludedAppIDs":[1,3]}]}'><h2>Gold</h2><div data-price-final="315000" data-discount="94"><div class="discount_final_price">₩ 3,150</div></div></div>'''
+    html = '''<div data-ds-bundleid="5" data-ds-bundle-data='{"m_bMustPurchaseAsSet":0,"m_rgItems":[{"m_rgIncludedAppIDs":[1,3]}]}'><h2>Gold</h2><div data-price-final="315000" data-discount="94"><div class="discount_original_price">₩ 53,000</div><div class="discount_final_price">₩ 3,150</div></div></div>'''
     _, bundles = purchase_candidates(html, "run")
     assert bundles[0].app_ids == [1, 3] and bundles[0].price == 3150
+    assert bundles[0].original_price == 53000 and bundles[0].discount == 94
     assert not bundles[0].unconditional
     _, bundles = purchase_candidates(html.replace('AsSet":0', 'AsSet":1'), "run")
     assert bundles[0].unconditional
