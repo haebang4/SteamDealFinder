@@ -1,0 +1,12 @@
+min_discount: 90
+max_price: 5000
+max_pages: 4
+search_sort: _ASC
+max_games: 100
+max_packages_per_game: 12
+request_interval: 1.5
+retries: 3
+timeout: 30
+max_price_age_seconds: 600
+watch_app_ids: []
+output_dir: docs
